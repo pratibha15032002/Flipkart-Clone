@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart Clone</title>
+    <link rel="icon" href="https://static-assets-web.flixcart.com/www/promos/new/20150528-140547-favicon-original.png"
+        type="image/x-icon">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f0f2f5;
+            /* Light grey background for the page */
+            display: flex;
+            flex-direction: column;
+            /* Stack header and login content vertically */
+            min-height: 100vh;
+            /* Ensure body takes full viewport height */
+            margin: 0;
+        }
+
+        /* Header styling */
+        header {
+            width: 100%;
+            height: 90px;
+            background-color: #2874f0;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+            flex-shrink: 0;
+
+        }
+
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .logo {
+            color: white;
+            font-size: 30px;
+            font-style: italic;
+            font-weight: bold;
+            line-height: 1;
+
+        }
+
+        .lm {
+            color: white;
+            font-size: 20px;
+            font-style: italic;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+        }
+
+        .plus-text {
+            color: #ffe500;
+            font-weight: bold;
+            margin-left: 3px;
+        }
+
+        /* Search Bar Container */
+        .search-container {
+            position: relative;
+            flex-grow: 1;
+            max-width: 560px;
+            margin: 0 10px;
+        }
+
+        .search-bar {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 2px;
+            padding: 8px 16px 8px 40px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-bar::placeholder {
+            color: #878787;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: #878787;
+            pointer-events: none;
+            width: 18px;
+            height: 18px;
+
+        }
+
+        /* Header Right Section */
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .header-right a {
+            color: white;
+            text-decoration: none;
+            font-size: 25px;
+            /* Adjusted font size */
+            margin-left: 25px;
+            /* Space between navigation items */
+            white-space: nowrap;
+            /* Prevent items from wrapping */
+            font-weight: 500;
+            display: flex;
+            /* For aligning cart icon with text */
+            align-items: center;
+        }
+
+        .header-right a:hover {
+            opacity: 0.8;
+            /* Subtle hover effect */
+        }
+
+        .login-button {
+            background-color: white;
+            color: #2874f0;
+            padding: 8px 25px;
+            /* Adjusted padding */
+            border-radius: 2px;
+            /* Smaller border-radius */
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 20px;
+            /* Adjusted font size */
+            margin-left: 12px;
+            /* Remove left margin from the 'a' tag */
+        }
+
+        .login-button:hover {
+            background-color: #f0f0f0;
+            /* Slight hover effect */
+        }
+
+        .arrow-down {
+            margin-left: 5px;
+            font-size: 10px;
+            /* Smaller arrow */
+            vertical-align: middle;
+            /* Align with text */
+        }
+
+        .cart-icon {
+            margin-right: 8px;
+            /* Space between cart icon and text */
+            font-size: 18px;
+            /* Adjusted cart icon size */
+        }
+
+        /* Login Page Container - Centered Content */
+        .main-content {
+            flex-grow: 1;
+            /* Allows this section to take remaining vertical space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            /* Add some padding around the login card */
+        }
+
+        /* Main Container for the Login Form Card */
+        .login-page-container {
+            display: flex;
+            width: 80%;
+            /* Adjust total width as needed */
+            height: 600px;
+            /* Adjust total height as needed */
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            /* Ensures rounded corners apply correctly to panels */
+            background-color: #fff;
+            /* Default background for the whole card */
+        }
+
+        /* Left Blue Panel */
+        .login-left-panel {
+            background-color: #2874f0;
+            /* Flipkart blue */
+            width: 40%;
+            /* Approx 40% of the container width */
+            padding: 40px 30px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Pushes content to top/bottom */
+        }
+
+        .login-heading {
+            font-size: 35px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .login-subtext {
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            /* Space above illustration */
+        }
+
+        .login-illustration {
+            text-align: center;
+            /* Center the image */
+            margin-top: auto;
+            /* Pushes it to the bottom */
+        }
+
+        .login-illustration img {
+            max-width: 100%;
+            /* Ensure image fits */
+            height: auto;
+            display: block;
+            /* Remove extra space below image */
+            margin: 0 auto;
+            /* Center image horizontally */
+        }
+
+        /* Right White Panel */
+        .login-right-panel {
+            width: 60%;
+            /* Approx 60% of the container width */
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            /* Stack content vertically */
+            justify-content: center;
+            /* Center content vertically */
+        }
+
+        .login-form-content {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            /* Space below the input field */
+        }
+
+        input[type="text"].login-input {
+            /* Specific class for login input */
+            width: 100%;
+            padding: 10px 0;
+            /* Only horizontal padding for the input text */
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            /* Only bottom border */
+            font-size: 22px;
+            color: #212121;
+            outline: none;
+            /* Remove focus outline */
+        }
+
+        input[type="text"].login-input::placeholder {
+            color: #878787;
+        }
+
+        input[type="text"].login-input:focus {
+            border-bottom-color: #2874f0;
+
+        }
+
+        .terms-text {
+            font-size: 22px;
+            color: #878787;
+            margin-top: 20px;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .terms-text .link {
+            color: #2874f0;
+            /* Blue color for links */
+            text-decoration: none;
+        }
+
+        .terms-text .link:hover {
+            text-decoration: underline;
+            /* Underline on hover */
+        }
+
+        .request-otp-btn {
+            width: 100%;
+            padding: 15px 25px;
+            background-color: #fb641b;
+            /* Flipkart's orange/red button color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2);
+        }
+
+        .request-otp-btn:hover {
+            background-color: #e05513;
+            /* Slightly darker on hover */
+        }
+
+        /* Responsiveness for Header and Login Page */
+        @media (max-width: 900px) {
+            header {
+                padding: 0 15px;
+                /* Reduce header padding */
+                height: 55px;
+            }
+
+            .logo-section {
+                margin-right: 10px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .lm {
+                font-size: 10px;
+            }
+
+            .search-bar {
+                height: 34px;
+                font-size: 13px;
+                padding: 8px 12px 8px 35px;
+            }
+
+            .search-icon {
+                left: 10px;
+                width: 16px;
+                height: 16px;
+            }
+
+            .header-right a {
+                font-size: 14px;
+                margin-left: 15px;
+            }
+
+            .login-button {
+                padding: 7px 20px;
+                font-size: 14px;
+            }
+
+            .cart-icon {
+                font-size: 16px;
+                margin-right: 5px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                /* Allow header items to wrap */
+                height: auto;
+                /* Height adjusts to wrapped content */
+                padding: 10px;
+                justify-content: center;
+            }
+
+            .logo-section {
+                width: 100%;
+                align-items: center;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .search-container {
+                order: 3;
+                /* Move search bar to the bottom on mobile */
+                margin: 10px 0;
+                max-width: 100%;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-around;
+                margin-left: 0;
+            }
+
+            .header-right a {
+                margin-left: 0;
+                font-size: 15px;
+            }
+
+            .login-button {
+                padding: 8px 20px;
+                font-size: 15px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .login-page-container {
+                flex-direction: column;
+                /* Stack panels vertically */
+                width: 90%;
+                /* Take more width on smaller screens */
+                height: auto;
+                /* Height adjusts to content */
+            }
+
+            .login-left-panel,
+            .login-right-panel {
+                width: 100%;
+                /* Each panel takes full width */
+                padding: 30px 20px;
+                /* Adjust padding */
+            }
+
+            .login-left-panel {
+                height: 200px;
+                /* Fixed height for left panel on mobile */
+                justify-content: flex-start;
+                /* Align content to top */
+            }
+
+            .login-illustration {
+                display: none;
+                /* Hide illustration on small screens to save space */
+            }
+
+            .login-heading {
+                font-size: 24px;
+            }
+
+            .login-subtext {
+                font-size: 14px;
+            }
+
+            .login-form-content {
+                max-width: 100%;
+                /* Allow form content to take full width */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-page-container {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                /* No shadow for full-width mobile view */
+                border-radius: 0;
+            }
+
+            body {
+                background-color: #fff;
+                /* White background for mobile, no grey border */
+            }
+
+            header {
+                padding: 5px;
+            }
+
+            .header-right a {
+                font-size: 14px;
+            }
+
+            .login-button {
+                font-size: 14px;
+                padding: 6px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-section">
+            <div class="logo">Flipkart</div>
+            <div class="lm">Explore <span class="plus-text">Plus</span></div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search for products, brands and more">
+            <svg class="search-icon" width="20px" height="20px" viewBox="0 0 48 48" fill="currentColor">
+                <path
+                    d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
+                </path>
+            </svg>
+        </div>
+
+        <div class="header-right">
+            <a href="login.html"><button class="login-button">Login</button></a>
+            <a href="https://seller.flipkart.com/sell-online?utm_source=fkwebsite&utm_medium=websitedirect">Become a Seller</a>
+            <a href="#">More <span class="arrow-down">&#9660;</span></a>
+            <a href="cart2.html"><span class="cart-icon">🛒</span>Cart</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="login-page-container">
+            <div class="login-left-panel">
+                <h2 class="login-heading">Login</h2>
+                <p class="login-subtext">Get access to your Orders, Wishlist and Recommendations</p>
+                <div class="login-illustration">
+                    <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/login_img_c4a81e.png"
+                        alt="">
+                </div>
+            </div>
+
+            <div class="login-right-panel">
+                <div class="login-form-content">
+                    <div class="input-group">
+                        <input type="text" id="email-mobile" class="login-input"
+                            placeholder="Enter Email/Mobile number" />
+                    </div>
+                    <div class="terms-text">
+                        By continuing, you agree to Flipkart's <a href="#" class="link">Terms of Use</a> and <a href="#"
+                            class="link">Privacy Policy</a>.
+                    </div>
+                    <button type="button" class="request-otp-btn">Request OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

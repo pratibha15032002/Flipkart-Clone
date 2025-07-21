@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart Cart - Your Shopping Cart</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Basic reset for consistent styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Roboto, Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #f1f2f4;
+            /* Light background for the page */
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header styling */
+        header {
+            width: 100%;
+            height: 75px;
+            background-color: #2874f0;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            /* Increased for prominence */
+            margin: 0;
+            font-weight: bold;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            /* Slightly increased spacing */
+            font-size: 1rem;
+            /* Adjusted for better readability */
+            transition: text-decoration 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+            transform: translateY(-2px);
+        }
+
+        /* Footer styling */
+        footer {
+            width: 100%;
+            background-color: #212121;
+            /* Darker footer */
+            color: white;
+            height: 65px;
+            margin-top: 2rem;
+            text-align: center;
+            padding-top: 1.25rem;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom button styles */
+        .btn-primary {
+            background-color: #2874f0;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a60cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: #fb641b;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e05310;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* Quantity input styling */
+        .input-quantity {
+            width: 4rem;
+            text-align: center;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.25rem;
+            padding: 0.4rem 0.5rem;
+            /* Adjusted padding */
+            -moz-appearance: textfield;
+            font-size: 0.95rem;
+        }
+
+        /* Hide arrows for Chrome, Safari, Edge */
+        .input-quantity::-webkit-outer-spin-button,
+        .input-quantity::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Rating star color */
+        .rating-star {
+            color: #ffc107;
+        }
+
+        /* Price text decorations */
+        .price-original {
+            text-decoration: line-through;
+            color: #718096;
+            font-size: 0.9rem;
+            /* Slightly smaller */
+        }
+
+        .price-discount {
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 0.95rem;
+            /* Slightly larger */
+        }
+
+        /* Main content wrapper for responsive layout */
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 4%;
+            /* Increased padding */
+            gap: 1.5rem;
+            /* Increased gap */
+            align-items: flex-start;
+            max-width: 1200px;
+            /* Max width for content */
+            margin: 0 auto;
+            /* Center the content */
+        }
+
+        @media (min-width: 768px) {
+            .main-content-wrapper {
+                flex-direction: row;
+            }
+        }
+
+        /* Section styling (products and cart) */
+        .section_cart {
+            flex: 2;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            /* Increased padding */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+            /* Softer shadow */
+            border-radius: 0.75rem;
+            width: 100%;
+        }
+
+        .cart_aside {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            /* Increased padding */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+            /* Softer shadow */
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            /* Adjusted gap */
+            width: 100%;
+            min-width: 280px;
+            /* Ensure a minimum width */
+        }
+
+        /* Product card styling */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.25rem;
+            /* Adjusted padding */
+            border-radius: 0.75rem;
+            /* More rounded corners */
+            box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.08);
+            margin-bottom: 0;
+            /* Managed by grid gap */
+            background-color: #fff;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        /* Product list grid */
+        .list-item {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 640px) {
+            .list-item {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .list-item {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        /* Heading for sections */
+        .cart_heading {
+            font-size: 1.75rem;
+            /* Larger heading */
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+            /* Adjusted margin */
+            color: #333;
+            border-bottom: 2px solid #e2e8f0;
+            /* Thicker border */
+            padding-bottom: 0.75rem;
+        }
+
+        /* Cart details (total items, subtotal, discount) */
+        .cart_details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.05rem;
+            /* Slightly larger text */
+            padding: 0.6rem 0;
+            /* Adjusted padding */
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .cart_details:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+
+        .cart_details span:first-child {
+            color: #4a5568;
+        }
+
+        .cart_details span:last-child {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .cart_details.total-amount {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1a202c;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+
+        /* Custom message box styling */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Darker overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .message-box-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .message-box-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+            /* Stronger shadow */
+            text-align: center;
+            max-width: 90%;
+            width: 450px;
+            /* Slightly wider */
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .message-box-overlay.visible .message-box-content {
+            transform: translateY(0);
+        }
+
+        .message-box-content h3 {
+            font-size: 1.75rem;
+            /* Larger title */
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .message-box-content p {
+            margin-bottom: 1.5rem;
+            color: #4a5568;
+            font-size: 1.05rem;
+        }
+
+        .message-box-content button {
+            background-color: #2874f0;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .message-box-content button:hover {
+            background-color: #1a60cc;
+            transform: translateY(-2px);
+        }
+
+        /* Utility classes for layout and spacing (formerly Tailwind) */
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+            /* 16px */
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+            /* 16px */
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+            /* 4px */
+        }
+
+        .mr-1 {
+            margin-right: 0.25rem;
+            /* 4px */
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
+            /* 8px */
+        }
+
+        .mr-4 {
+            margin-right: 1rem;
+            /* 16px */
+        }
+
+        .mt-auto {
+            margin-top: auto;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+            /* 16px */
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+            /* 8px */
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .w-32 {
+            width: 8rem;
+            /* 128px */
+        }
+
+        .h-32 {
+            height: 8rem;
+            /* 128px */
+        }
+
+        .w-16 {
+            width: 4rem;
+            /* 64px */
+        }
+
+        .h-16 {
+            height: 4rem;
+            /* 64px */
+        }
+
+        .h-4 {
+            height: 1rem;
+            /* 16px */
+        }
+
+        .w-4 {
+            width: 1rem;
+            /* 16px */
+        }
+
+        .h-5 {
+            height: 1.25rem;
+            /* 20px */
+        }
+
+        .w-5 {
+            width: 1.25rem;
+            /* 20px */
+        }
+
+        .object-contain {
+            object-fit: contain;
+        }
+
+        .rounded-md {
+            border-radius: 0.375rem;
+            /* 6px */
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+            /* 8px */
+        }
+
+        .rounded-l-md {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+
+        .rounded-r-md {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            /* 18px */
+            line-height: 1.75rem;
+            /* 28px */
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            /* 20px */
+            line-height: 1.75rem;
+            /* 28px */
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            /* 14px */
+            line-height: 1.25rem;
+            /* 20px */
+        }
+
+        .text-gray-500 {
+            color: #a0aec0;
+        }
+
+        .text-gray-600 {
+            color: #718096;
+        }
+
+        .text-gray-700 {
+            color: #4a5568;
+        }
+
+        .text-gray-800 {
+            color: #2d3748;
+        }
+
+        .text-yellow-500 {
+            color: #ecc94b;
+        }
+
+        .text-green-600 {
+            color: #38a169;
+        }
+
+        .text-red-500 {
+            color: #ef4444;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .border-b {
+            border-bottom-width: 1px;
+            border-color: #e2e8f0;
+        }
+
+        .pb-4 {
+            padding-bottom: 1rem;
+        }
+
+        .p-2 {
+            padding: 0.5rem;
+        }
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+        .bg-white {
+            background-color: #fff;
+        }
+
+        .bg-gray-50 {
+            background-color: #f7fafc;
+        }
+
+        .hover\:bg-gray-100:hover {
+            background-color: #edf2f7;
+            /* Slightly darker hover */
+        }
+
+        .hover\:bg-red-100:hover {
+            background-color: #fee2e2;
+        }
+
+        .transition-colors {
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-duration: 150ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .border {
+            border-width: 1px;
+        }
+
+        .border-gray-200 {
+            border-color: #edf2f7;
+        }
+
+        .border-gray-300 {
+            border-color: #cbd5e0;
+        }
+
+        .focus\:outline-none:focus {
+            outline: 0;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+            /* Focus ring */
+        }
+
+        .last\:mb-0:last-child {
+            margin-bottom: 0;
+        }
+
+        .last\:pb-0:last-child {
+            padding-bottom: 0;
+        }
+
+        .last\:border-b-0:last-child {
+            border-bottom-width: 0;
+        }
+
+        /* Styles for the payment modal */
+        .payment-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .payment-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            /* Slightly wider for more content */
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .payment-modal-overlay.show .payment-modal-content {
+            transform: translateY(0);
+        }
+
+        .payment-input {
+            border: 1px solid #d1d5db;
+            /* Gray-300 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            padding: 0.75rem 1rem;
+            width: 100%;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+
+        .payment-input:focus {
+            outline: none;
+            border-color: #2874f0;
+            /* Flipkart blue on focus */
+            box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.2);
+        }
+
+        .payment-message {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .payment-message.success {
+            background-color: #d1fae5;
+            /* Green-100 */
+            color: #065f46;
+            /* Green-800 */
+        }
+
+        .payment-message.error {
+            background-color: #fee2e2;
+            /* Red-100 */
+            color: #991b1b;
+            /* Red-800 */
+        }
+
+        /* Payment method tabs styling */
+        .payment-method-tab {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            /* Gray-500 */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .payment-method-tab.active {
+            border-color: #2874f0;
+            /* Flipkart blue */
+            color: #2874f0;
+        }
+
+        .payment-method-tab:hover {
+            color: #2874f0;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Flipkart Cart</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="main-content-wrapper">
+        <section class="section_cart">
+            <h2 class="cart_heading">Available Products</h2>
+            <div id="product-list" class="list-item">
+            </div>
+        </section>
+
+        <aside class="cart_aside">
+            <h2 class="cart_heading">Shopping Cart</h2>
+            <div id="cart-items" class="flex flex-col gap-4 mb-4">
+                <p id="cart-empty-message" class="text-gray-500 text-center">Your cart is empty.</p>
+            </div>
+            <div id="cart-summary" class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <div class="cart_details">
+                    <span class="font-medium">Total Items:</span>
+                    <span id="total-items" class="font-semibold">0</span>
+                </div>
+                <div class="cart_details">
+                    <span class="font-medium">Subtotal:</span>
+                    <span id="subtotal" class="font-semibold">₹0.00</span>
+                </div>
+                <div class="cart_details" style="border-bottom: none;">
+                    <span style="color: rgb(35, 174, 35);">You Saved:</span>
+                    <span id="total-discount" class="font-semibold text-green-600">₹0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn-primary w-full mt-4">Proceed to Checkout</button>
+                <button id="clear-cart-btn" class="btn-secondary w-full mt-2">Clear Cart</button>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Flipkart Clone. All rights reserved.</p>
+    </footer>
+
+    <div id="message-box" class="message-box-overlay">
+        <div class="message-box-content">
+            <h3 id="message-box-title"></h3>
+            <p id="message-box-text"></p>
+            <button id="message-box-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <div id="payment-modal-overlay" class="payment-modal-overlay">
+        <div class="payment-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 style="font-size: larger; font-weight: bold;">Payment Details</h3>
+                <button id="close-payment-modal" class="text-gray-500 hover:text-gray-700"
+                    style="font-size: 3rem; font-weight: bold; border: none; background: none; cursor: pointer;">&times;</button>
+            </div>
+
+            <div class="flex border-b border-gray-200" style="margin-bottom: 1.5rem;">
+                <div id="tab-cards" class="payment-method-tab active" data-method="cards">Credit/Debit Card</div>
+                <div id="tab-netbanking" class="payment-method-tab" data-method="netbanking">Net Banking</div>
+                <div id="tab-upi" class="payment-method-tab" data-method="upi">UPI</div>
+            </div>
+
+            <form id="payment-form">
+                <div id="payment-section-cards" class="payment-section">
+                    <div class="mb-4">
+                        <label for="card-number" class="block text-gray-700 text-sm font-bold mb-2">Card Number</label>
+                        <input type="text" id="card-number" class="payment-input" placeholder="XXXX XXXX XXXX XXXX"
+                            maxlength="19">
+                    </div>
+                    <div class="mb-4">
+                        <label for="card-name" class="block text-gray-700 text-sm font-bold mb-2">Costmer Name</label>
+                        <input type="text" id="card-name" class="payment-input" placeholder="John Doe">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4" style="margin-bottom: 1.5rem;">
+                        <div>
+                            <label for="expiry-date" class="block text-gray-700 text-sm font-bold mb-2">Expiry Date
+                                (MM/YY)</label>
+                            <input type="text" id="expiry-date" class="payment-input" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div>
+                            <label for="cvv" class="block text-gray-700 text-sm font-bold mb-2">CVV</label>
+                            <input type="text" id="cvv" class="payment-input" placeholder="XXX" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="payment-section-netbanking" class="payment-section hidden">
+                    <div class="mb-4">
+                        <label for="bank-select" class="block text-gray-700 text-sm font-bold mb-2">Select Your
+                            Bank</label>
+                        <select id="bank-select" class="payment-input">
+                            <option value="">-- Select Bank --</option>
+                            <option value="sbi">State Bank of India</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="axis">Axis Bank</option>
+                            <option value="kotak">Kotak Mahindra Bank</option>
+                            <option value="pnb">Punjab National Bank</option>
+                            <option value="other">Other Bank</option>
+                        </select>
+                    </div>
+                    <p class="text-sm text-gray-500" style="margin-top: 0.5rem;">You will be redirected to your bank's
+                        website to complete the payment.</p>
+                </div>
+
+                <div id="payment-section-upi" class="payment-section hidden">
+                    <div class="mb-4">
+                        <label for="upi-id" class="block text-gray-700 text-sm font-bold mb-2">Enter UPI ID</label>
+                        <input type="text" id="upi-id" class="payment-input" placeholder="yourname@bankupi">
+                    </div>
+                    <div class="text-center text-gray-600 mb-4" style="margin-bottom: 1rem;">OR</div>
+                    <button type="button" id="pay-via-upi-app-btn" class="btn-primary w-full mb-4">Pay via UPI App
+                        (PhonePe, Google Pay, etc.)</button>
+                    <p class="text-sm text-gray-500" style="margin-top: 0.5rem;">A payment request will be sent to your
+                        UPI app.</p>
+                </div>
+
+                <button type="submit" class="btn-secondary w-full">Complete Payment</button>
+                <div id="payment-message" class="payment-message hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data for products (simulating a database or API)
+        const products = [{
+            id: 1,
+            name: 'Samsung Galaxy S23 FE',
+            price: 14999,
+            originalPrice: 18000,
+            discount: '16% off',
+            rating: 4.3,
+            imageUrl: 'https://rukminim2.flixcart.com/image/96/96/xif0q/mobile/n/l/u/-original-imah2fjd7wfd9ksh.jpeg?q=90'
+        }, {
+            id: 2,
+            name: 'VIVO T5',
+            price: 58999,
+            originalPrice: 69900,
+            discount: '15% off',
+            rating: 4.7,
+            imageUrl: 'https://rukminim2.flixcart.com/image/96/96/xif0q/mobile/k/t/x/-original-imahbgpzbumfzkbh.jpeg?q=90'
+        }, {
+            id: 3,
+            name: 'Motorola G34 5G',
+            price: 11999,
+            originalPrice: 12999,
+            discount: '7% off',
+            rating: 4.2,
+            imageUrl: 'https://rukminim2.flixcart.com/image/96/96/xif0q/mobile/f/k/e/-original-imahbfd4zqn9zazz.jpeg?q=60'
+        }, {
+            id: 4,
+            name: 'Redmi 13C',
+            price: 7999,
+            originalPrice: 11999,
+            discount: '33% off',
+            rating: 4.4,
+            imageUrl: 'https://rukminim2.flixcart.com/image/96/96/xif0q/mobile/r/l/c/-original-imah3xk892aj9gck.jpeg?q=60'
+        }, {
+            id: 5,
+            name: 'POCO M6 Pro 5G',
+            price: 10999,
+            originalPrice: 14999,
+            discount: '26% off',
+            rating: 4.3,
+            imageUrl: 'https://rukminim2.flixcart.com/image/80/80/xif0q/mobile/t/c/y/-original-imahaff2rbuykhcw.jpeg?q=60'
+        }, {
+            id: 6,
+            name: 'realme C51',
+            price: 8999,
+            originalPrice: 9999,
+            discount: '10% off',
+            rating: 4.4,
+            imageUrl: 'https://rukminim2.flixcart.com/image/96/96/xif0q/mobile/f/k/e/-original-imahbfd4zqn9zazz.jpeg?q=60'
+        }];
+
+        // Using a Map to store cart items for efficient lookups and updates
+        // Structure: productId => { product: productObject, quantity: number }
+        const cart = new Map();
+
+        // Get references to DOM elements
+        const productListings = document.getElementById('product-list');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalItemsSpan = document.getElementById('total-items');
+        const subtotalSpan = document.getElementById('subtotal');
+        const totalDiscountSpan = document.getElementById('total-discount');
+        const cartEmptyMessage = document.getElementById('cart-empty-message');
+        const clearCartBtn = document.getElementById('clear-cart-btn');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        // Message box elements
+        const messageBox = document.getElementById('message-box');
+        const messageBoxTitle = document.getElementById('message-box-title');
+        const messageBoxText = document.getElementById('message-box-text');
+        const messageBoxOkBtn = document.getElementById('message-box-ok-btn');
+
+        /**
+         * Displays a custom message box to the user.
+         * @param {string} title - The title of the message box.
+         * @param {string} message - The message content.
+         */
+        function showMessageBox(title, message) {
+            messageBoxTitle.textContent = title;
+            messageBoxText.textContent = message;
+            messageBox.classList.add('visible'); // Show the message box with transition
+        }
+
+        // Event listener for the message box OK button
+        messageBoxOkBtn.addEventListener('click', () => {
+            messageBox.classList.remove('visible'); // Hide the message box with transition
+        });
+
+        /**
+         * Renders all available products on the page.
+         */
+        function renderProducts() {
+            productListings.innerHTML = ''; // Clear existing content
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.imageUrl}" alt="${product.name}" class="w-32 h-32 object-contain rounded-md" style="margin-bottom: 1rem;" onerror="this.onerror=null;this.src='https://via.placeholder.com/128x128.png?text=Image+Not+Found';">
+                    <h3 class="text-lg font-semibold mb-1">${product.name}</h3>
+                    <div class="flex items-center" style="margin-bottom: 0.5rem;">
+                        <span class="text-yellow-500 mr-1">${product.rating} ★</span>
+                        <span class="text-gray-500 text-sm">(${Math.floor(Math.random() * 1000) + 1} ratings)</span>
+                    </div>
+                    <div class="flex items-baseline" style="margin-bottom: 0.5rem;">
+                        <span class="text-xl font-bold mr-2">₹${product.price.toLocaleString('en-IN')}</span>
+                        <span class="price-original text-sm mr-1">₹${product.originalPrice.toLocaleString('en-IN')}</span>
+                        <span class="price-discount text-sm">${product.discount}</span>
+                    </div>
+                    <button class="add-to-cart-btn btn-primary w-full mt-auto" data-product-id="${product.id}">Add to Cart</button>
+                    <button class="buy-now-btn btn-secondary w-full mt-2" data-product-id="${product.id}">Buy Now</button>
+                `;
+                productListings.appendChild(productCard);
+            });
+
+            // Event delegation for "Add to Cart" and "Buy Now" buttons
+            productListings.addEventListener('click', (event) => {
+                const button = event.target.closest('.add-to-cart-btn, .buy-now-btn');
+                if (button) {
+                    const productId = parseInt(button.dataset.productId);
+                    const productToAdd = products.find(p => p.id === productId);
+                    if (productToAdd) {
+                        if (button.classList.contains('add-to-cart-btn')) {
+                            addToCart(productToAdd);
+                            showMessageBox('Item Added', `${productToAdd.name} has been added to your cart.`);
+                        } else if (button.classList.contains('buy-now-btn')) {
+                            buyNow(productToAdd);
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Adds a product to the cart or increments its quantity if already present.
+         * @param {object} product - The product object to add.
+         */
+        function addToCart(product) {
+            if (cart.has(product.id)) {
+                cart.get(product.id).quantity++;
+            } else {
+                cart.set(product.id, {
+                    product,
+                    quantity: 1
+                });
+            }
+            renderCart(); // Re-render the cart to reflect changes
+        }
+
+        /**
+         * Handles the "Buy Now" action for a product.
+         * @param {object} product - The product object to buy.
+         */
+        function buyNow(product) {
+            addToCart(product);
+            showMessageBox('Buying Now', `Proceeding to checkout with ${product.name}. (This is a placeholder action)`);
+
+        }
+
+
+/**
+         * Handles the "Buy Now" action for a product.
+         * @param {object} product - The product object to buy.
+         */
+        function buyNow(product) {
+            // Clear the existing cart before adding the "Buy Now" item
+            cart.clear();
+            
+            // Add only the "Buy Now" product to the cart with quantity 1
+            cart.set(product.id, {
+                product: product,
+                quantity: 1
+            });
+            
+            renderCart(); // Re-render the cart to show only the "Buy Now" item
+            
+            showMessageBox('Proceeding to Checkout', `You are now buying ${product.name}. Please complete the payment.`);
+            
+            // Automatically open the payment modal
+            setTimeout(() => {
+                paymentModalOverlay.classList.add('show');
+                switchPaymentMethod('cards'); // Ensure cards tab is active when opening modal
+            }, 1000); // Give a moment for the message box to be seen before modal opens
+        }
+
+        /**
+         * Updates the quantity of a product in the cart. If quantity is 0, removes the item.
+         * @param {number} productId - The ID of the product to update.
+         * @param {number} quantity - The new quantity.
+         */
+        function updateCartQuantity(productId, quantity) {
+            if (quantity <= 0) {
+                cart.delete(productId); // Remove item if quantity is 0 or less
+            } else if (cart.has(productId)) {
+                cart.get(productId).quantity = quantity; // Update quantity
+            }
+            renderCart(); // Re-render the cart to reflect changes
+        }
+
+        /**
+         * Renders the current state of the shopping cart.
+         */
+        function renderCart() {
+            cartItemsContainer.innerHTML = ''; // Clear existing cart items
+            let totalItems = 0;
+            let subtotal = 0;
+            let totalDiscount = 0;
+
+            if (cart.size === 0) {
+                cartEmptyMessage.classList.remove('hidden'); // Show empty cart message
+                checkoutBtn.disabled = true; // Disable checkout if cart is empty
+                clearCartBtn.disabled = true; // Disable clear cart if cart is empty
+            } else {
+                cartEmptyMessage.classList.add('hidden'); // Hide empty cart message
+                checkoutBtn.disabled = false; // Enable checkout
+                clearCartBtn.disabled = false; // Enable clear cart
+
+                cart.forEach(item => {
+                    const itemTotal = item.product.price * item.quantity;
+                    const originalItemTotal = item.product.originalPrice * item.quantity;
+                    const itemDiscount = originalItemTotal - itemTotal;
+
+                    totalItems += item.quantity;
+                    subtotal += itemTotal;
+                    totalDiscount += itemDiscount;
+
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'flex items-center justify-between border-b pb-4 mb-4';
+                    cartItemDiv.innerHTML = `
+                        <img src="${item.product.imageUrl}" alt="${item.product.name}" class="w-16 h-16 object-contain rounded-md" style="margin-right: 1rem;" onerror="this.onerror=null;this.src='https://via.placeholder.com/64x64.png?text=Image+Not+Found';">
+                        <div style="flex-grow: 1;">
+                            <h4 class="font-semibold text-gray-800">${item.product.name}</h4>
+                            <p class="text-sm text-gray-600">₹${item.product.price.toLocaleString('en-IN')} x ${item.quantity}</p>
+                            <p class="text-sm text-green-600 font-medium">Discount: ₹${itemDiscount.toLocaleString('en-IN')}</p>
+                        </div>
+                        <div class="flex items-center border border-gray-300 rounded-md">
+                            <button class="quantity-btn p-2 text-gray-600 hover:bg-gray-100 rounded-l-md transition-colors" data-action="decrease" data-product-id="${item.product.id}" style="border: none; background: none; cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                </svg>
+                            </button>
+                            <input type="number" class="input-quantity" value="${item.quantity}" min="1" data-product-id="${item.product.id}" style="border: none; text-align: center;">
+                            <button class="quantity-btn p-2 text-gray-600 hover:bg-gray-100 rounded-r-md transition-colors" data-action="increase" data-product-id="${item.product.id}" style="border: none; background: none; cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button>
+                        </div>
+                        <button class="remove-item-btn text-red-500 rounded-full transition-colors" aria-label="Remove item" data-product-id="${item.product.id}" style="margin-left: 1rem; padding: 0.5rem; border: none; background: none; cursor: pointer;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 11-2 0v6a1 1 0 112 0V8z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+                    cartItemsContainer.appendChild(cartItemDiv);
+                });
+            }
+
+            // Update summary details
+            totalItemsSpan.textContent = totalItems;
+            subtotalSpan.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+            totalDiscountSpan.textContent = `₹${totalDiscount.toLocaleString('en-IN')}`;
+
+            // Add event listeners for cart item interactions using delegation
+            cartItemsContainer.removeEventListener('click', handleCartItemInteraction); // Prevent duplicate listeners
+            cartItemsContainer.removeEventListener('change', handleCartItemInteraction); // Prevent duplicate listeners
+            cartItemsContainer.addEventListener('click', handleCartItemInteraction);
+            cartItemsContainer.addEventListener('change', handleCartItemInteraction);
+
+            // Remove last item styling if it's the only one left after a deletion
+            const cartItems = cartItemsContainer.querySelectorAll('.flex');
+            if (cartItems.length > 0) {
+                cartItems[cartItems.length - 1].classList.add('last:mb-0', 'last:pb-0', 'last:border-b-0');
+            }
+        }
+
+        /**
+         * Handles click and change events for cart items using event delegation.
+         * @param {Event} event - The event object.
+         */
+        function handleCartItemInteraction(event) {
+            const target = event.target;
+            const productId = parseInt(target.dataset.productId || target.closest('[data-product-id]')?.dataset.productId);
+
+            if (!productId) return; // Exit if no product ID found
+
+            if (target.classList.contains('input-quantity')) {
+                const newQuantity = parseInt(target.value);
+                if (!isNaN(newQuantity) && newQuantity >= 0) {
+                    updateCartQuantity(productId, newQuantity);
+                } else {
+                    // Revert to current cart quantity if input is invalid
+                    target.value = cart.has(productId) ? cart.get(productId).quantity : 1;
+                    showMessageBox('Invalid Quantity', 'Please enter a valid quantity (a positive number).');
+                }
+            } else if (target.closest('.quantity-btn')) {
+                const action = target.closest('.quantity-btn').dataset.action;
+                const currentItem = cart.get(productId);
+
+                if (currentItem) {
+                    let newQuantity = currentItem.quantity;
+                    if (action === 'increase') {
+                        newQuantity++;
+                    } else if (action === 'decrease') {
+                        newQuantity--;
+                    }
+                    updateCartQuantity(productId, newQuantity);
+                }
+            } else if (target.closest('.remove-item-btn')) {
+                const productName = cart.get(productId)?.product.name || 'item';
+                updateCartQuantity(productId, 0); // Set quantity to 0 to remove
+                showMessageBox('Item Removed', `${productName} has been removed from your cart.`);
+            }
+        }
+
+        /**
+         * Clears all items from the cart.
+         */
+        function clearCart() {
+            if (cart.size > 0) {
+                cart.clear();
+                renderCart(); // Re-render the cart
+                showMessageBox('Cart Cleared', 'Your shopping cart has been emptied.');
+            } else {
+                showMessageBox('Cart Empty', 'Your cart is already empty.');
+            }
+        }
+
+        // Payment Modal Elements
+        const paymentModalOverlay = document.getElementById('payment-modal-overlay');
+        const closePaymentModalBtn = document.getElementById('close-payment-modal');
+        const paymentForm = document.getElementById('payment-form');
+        const paymentMessageDiv = document.getElementById('payment-message');
+
+        // Payment method tabs and sections
+        const tabCards = document.getElementById('tab-cards');
+        const tabNetbanking = document.getElementById('tab-netbanking');
+        const tabUpi = document.getElementById('tab-upi');
+
+        const paymentSectionCards = document.getElementById('payment-section-cards');
+        const paymentSectionNetbanking = document.getElementById('payment-section-netbanking');
+        const paymentSectionUpi = document.getElementById('payment-section-upi');
+
+        // Card inputs
+        const cardNumberInput = document.getElementById('card-number');
+        const cardNameInput = document.getElementById('card-name');
+        const expiryDateInput = document.getElementById('expiry-date');
+        const cvvInput = document.getElementById('cvv');
+
+        // Net Banking input
+        const bankSelect = document.getElementById('bank-select');
+
+        // UPI inputs
+        const upiIdInput = document.getElementById('upi-id');
+        const payViaUpiAppBtn = document.getElementById('pay-via-upi-app-btn');
+
+        let activePaymentMethod = 'cards'; // Default active payment method
+
+        function showPaymentMessage(message, type) {
+            paymentMessageDiv.textContent = message;
+            paymentMessageDiv.className = `payment-message ${type}`;
+            paymentMessageDiv.classList.remove('hidden');
+            setTimeout(() => {
+                paymentMessageDiv.classList.add('hidden');
+            }, 3000); // Hide message after 3 seconds
+        }
+
+        /**
+         * Switches the active payment method tab and displays the corresponding section.
+         * @param {string} method - The payment method to activate ('cards', 'netbanking', 'upi').
+         */
+        function switchPaymentMethod(method) {
+            // Deactivate all tabs and hide all sections
+            document.querySelectorAll('.payment-method-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.payment-section').forEach(section => section.classList.add('hidden'));
+
+            // Activate the selected tab and show its section
+            document.getElementById(`tab-${method}`).classList.add('active');
+            document.getElementById(`payment-section-${method}`).classList.remove('hidden');
+            activePaymentMethod = method; // Update active method state
+
+            // Reset form for new method selection to clear previous validation messages
+            paymentForm.reset();
+            paymentMessageDiv.classList.add('hidden');
+        }
+
+        // Event listener to close the payment modal
+        closePaymentModalBtn.addEventListener('click', () => {
+            paymentModalOverlay.classList.remove('show');
+        });
+
+        // Event listeners for payment method tabs
+        tabCards.addEventListener('click', () => switchPaymentMethod('cards'));
+        tabNetbanking.addEventListener('click', () => switchPaymentMethod('netbanking'));
+        tabUpi.addEventListener('click', () => switchPaymentMethod('upi'));
+
+        // Event listener for payment form submission
+        paymentForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            let isValid = true;
+            let message = '';
+
+            // Perform validation based on the active payment method
+            if (activePaymentMethod === 'cards') {
+                const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+                const cardName = cardNameInput.value.trim();
+                const expiryDate = expiryDateInput.value.trim();
+                const cvv = cvvInput.value.trim();
+
+                if (cardNumber.length < 13 || cardNumber.length > 19 || isNaN(cardNumber)) {
+                    message = 'Please enter a valid card number.';
+                    isValid = false;
+                } else if (cardName === '') {
+                    message = 'Cardholder name cannot be empty.';
+                    isValid = false;
+                } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+                    message = 'Please enter a valid expiry date (MM/YY).';
+                    isValid = false;
+                } else if (cvv.length < 3 || cvv.length > 4 || isNaN(cvv)) {
+                    message = 'Please enter a valid CVV.';
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    console.log('Simulating Card Payment with:', {
+                        cardNumber,
+                        cardName,
+                        expiryDate,
+                        cvv
+                    });
+                }
+
+            } else if (activePaymentMethod === 'netbanking') {
+                const selectedBank = bankSelect.value;
+                if (selectedBank === '') {
+                    message = 'Please select your bank.';
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    console.log('Simulating Net Banking Payment with Bank:', selectedBank);
+                }
+
+            } else if (activePaymentMethod === 'upi') {
+                const upiId = upiIdInput.value.trim();
+                if (upiId === '' || !/.+@.+\..+/.test(upiId)) { // Basic UPI ID format check
+                    message = 'Please enter a valid UPI ID (e.g., yourname@bankupi).';
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    console.log('Simulating UPI Payment with ID:', upiId);
+                }
+            }
+
+            if (!isValid) {
+                showPaymentMessage(message, 'error');
+                return;
+            }
+
+            // Simulate payment processing for all methods
+            const isPaymentSuccessful = Math.random() > 0.3; // 70% chance of success
+
+            if (isPaymentSuccessful) {
+                showPaymentMessage('Payment Successful! Thank you for your purchase.', 'success');
+                setTimeout(() => {
+                    // In a real app, you'd clear the cart and redirect to an order confirmation page
+                    paymentModalOverlay.classList.remove('show'); // Close modal
+                    clearCart(); // Clear cart after successful payment
+                }, 2000);
+            } else {
+                showPaymentMessage('Payment Failed. Please try again.', 'error');
+            }
+        });
+
+        // Event listener for "Pay via UPI App" button (no form submission)
+        payViaUpiAppBtn.addEventListener('click', () => {
+            // In a real scenario, this would trigger a UPI Intent or deep link
+            showPaymentMessage('Redirecting to UPI app for payment... (Simulated)', 'success');
+            console.log('Simulating Pay via UPI App');
+            // Simulate success after a delay
+            setTimeout(() => {
+                const isPaymentSuccessful = Math.random() > 0.3; // 70% chance of success
+                if (isPaymentSuccessful) {
+                    showPaymentMessage('Payment Successful via UPI App!', 'success');
+                    setTimeout(() => {
+                        paymentModalOverlay.classList.remove('show');
+                        clearCart(); // Clear cart after successful payment
+                    }, 2000);
+                } else {
+                    showPaymentMessage('Payment Failed via UPI App. Please try again.', 'error');
+                }
+            }, 3000);
+        });
+
+        // Format card number input
+        cardNumberInput.addEventListener('input', (event) => {
+            let value = event.target.value.replace(/\D/g, ''); // Remove non-digits
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space every 4 digits
+            event.target.value = value;
+        });
+
+        // Format expiry date input
+        expiryDateInput.addEventListener('input', (event) => {
+            let value = event.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            event.target.value = value;
+        });
+
+
+        // Initialize the application when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(); // Display products
+            renderCart(); // Display initial empty cart
+        });
+
+        // Event listener for the "Clear Cart" button
+        clearCartBtn.addEventListener('click', clearCart);
+
+        // Event listener for the "Proceed to Checkout" button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.size > 0) {
+                paymentModalOverlay.classList.add('show'); // Open the payment modal
+                switchPaymentMethod('cards'); // Ensure cards tab is active when opening modal
+            } else {
+                showMessageBox('Cart Empty', 'Your cart is empty. Please add items before proceeding to checkout.');
+            }
+        });
+    </script>
+</body>
+
+</html>
